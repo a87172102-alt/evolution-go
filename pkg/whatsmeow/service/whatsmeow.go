@@ -925,7 +925,11 @@ func (mycli *MyClient) myEventHandler(rawEvt interface{}) {
 			// delivers messages to that active session and suppresses push notifications on
 			// the user's phone. When alwaysOnline is false we now send Unavailable instead.
 			var err error
-			if mycli.Instance.AlwaysOnline {
+			alwaysOnline := false
+			if dbInstance, dbErr := mycli.instanceRepository.GetInstanceByID(mycli.userID); dbErr == nil {
+				alwaysOnline = dbInstance.AlwaysOnline
+			}
+			if alwaysOnline {
 				go schedulePresenceUpdates(mycli)
 
 				err = mycli.WAClient.SendPresence(context.Background(), types.PresenceAvailable)
