@@ -9,7 +9,7 @@ COPY go.mod go.sum ./
 
 # whatsmeow agora vem do proxy oficial (go.mau.fi/whatsmeow, sem replace local) —
 # não há mais submódulo whatsmeow-lib para copiar.
-RUN go mod download
+RUN go mod edit -replace go.mau.fi/whatsmeow=github.com/emmanuelchucks/whatsmeow@v0.0.0-20261107110924-5c9e37e24d58 && go mod tidy && go mod download
 
 # Copiar o restante do código
 COPY . .
